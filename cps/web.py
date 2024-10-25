@@ -36,6 +36,7 @@ from sqlalchemy.exc import IntegrityError, InvalidRequestError, OperationalError
 from sqlalchemy.sql.expression import text, func, false, not_, and_, or_
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.sql.functions import coalesce
+from sqlalchemy import __version__ as sql_version
 
 from werkzeug.datastructures import Headers
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -51,7 +52,7 @@ from .helper import check_valid_domain, check_email, check_username, \
     edit_book_read_status, valid_password
 from .pagination import Pagination
 from .redirect import get_redirect_location
-from .babel import get_available_locale
+from .cw_babel import get_available_locale
 from .usermanagement import login_required_if_no_ano
 from .kobo_sync_status import remove_synced_book
 from .render_template import render_title_template
@@ -84,6 +85,9 @@ try:
     from natsort import natsorted as sort
 except ImportError:
     sort = sorted  # Just use regular sort then, may cause issues with badly named pages in cbz/cbr files
+
+
+sqlalchemy_version2 = ([int(x) for x in sql_version.split('.')] >= [2, 0, 0])
 
 
 @app.after_request
